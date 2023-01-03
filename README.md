@@ -32,7 +32,7 @@ Essentially it is a function which takes in 5 inputs, and returns 1 output.
 ## Domain
 The domain on which the model will be validated on. 
 
-```python
+```yaml
 S_bound = [0.0, 200.0]
 K_bound = [50.0, 150.0] 
 T_bound = [0.0, 5.0]
@@ -53,7 +53,7 @@ python riskfuel_test.py --data_frame_name <validation.csv>
 
 The output should look something like this: 
 
-```python 
+```bash 
  ============ Evaluating Student: Nik Pocuca ==================== 
  Full Name:
  Nikola Pocuca
