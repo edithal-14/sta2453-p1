@@ -67,7 +67,7 @@ The output should look something like this:
 
 The validation code will be checked manually for everyone. 
 
-### *Do not use the analytic pricer as part of your model. This is considered cheating and you will fail automatically and be subject to academic dishonesty * 
+### *Do not use the analytic pricer as part of your model. This is considered cheating, you will fail automatically and be subject to academic dishonesty * 
 
 You are free to use any packages/frameworks you like provided that they can be run and installed on a `ubuntu 20.04` docker image found here `https://hub.docker.com/_/ubuntu`. When writing code to evaluate your model, feel free to delete the skeleton code within `riskfuel_test.py`. 
 
