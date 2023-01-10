@@ -41,10 +41,11 @@ def main():
     y = torch.Tensor(df[["value"]].to_numpy())
 
     criterion = nn.MSELoss()
-    optimizer = optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
+    # optimizer = optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
+    optimizer = optim.Adam(model.parameters())
 
     # Train for 500 epochs
-    for i in range(100):
+    for i in range(10000):
 
         # TODO: Modify to account for dataset size
         y_hat = model(x)
@@ -62,9 +63,8 @@ def main():
         with torch.no_grad():
             # TODO: use a proper validation set
             validation_loss = criterion(model(x), y)
-
-        print(f"Iteration: {i} | Training Loss: {training_loss:.4f} | Validation Loss: {validation_loss:.4f} ")
-
+            validation_max = torch.max(torch.abs(y - model(x)))
+        print(f"Iteration: {i} | Training Loss: {training_loss:.4f} | Validation Loss: {validation_loss:.4f} | Max Error {validation_max:.4f} ")
     torch.save(model.state_dict(), "simple-model.pt")
 
 

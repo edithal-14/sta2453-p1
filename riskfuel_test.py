@@ -37,9 +37,9 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     """
 
     # DEFINITIONS.
-    student_name = "Nik Pocuca"  # adjust this.
-    full_name = "Nikola Pocuca" # adjust this.
-    student_id_name = "pocucani"
+    student_name = "Vignesh Edithal"  # adjust this.
+    full_name = "Vignesh Edithal" # adjust this.
+    student_id_name = "edithals"
 
     print(f"\n\n ============ Evaluating Student: {student_name} ========================= ")
     print(" Full name:")
@@ -55,7 +55,7 @@ def riskfuel_test(df: pd.DataFrame) -> float:
 
     # LOAD MODEL
     mm = PutNet()
-    mm.load_state_dict(torch.load("simple-model.pt"))
+    mm.load_state_dict(torch.load("model2.pt"))
     mm.eval()  # evaluation mode
 
     # EVALUATE MODEL
