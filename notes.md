@@ -1,30 +1,47 @@
-- Auto callable
+- Scenario
+    - Pension fund calls trader
+    - Trader runs the pricing model
+    - Trader waits for couple of days
+    - Trader quotes the price to pension fund
 
-- AI learn path MCMC
+- Riskfuel is a company which accelerates pricing model
 
-- pension fund calls trader
+- Put option
+    - Right to sell the stock at a strike price after maturity
+    - Bet the stock price will decrease
 
-- accelerate pricing
+- Call option
+    - Right to buy the stock at a strike price after maturity
+    - Bet the stock price will increase
 
-- put option, buy stock then sell stock at lower, pocket the cash
+- BSM (black - scholes model)
+    - Invented by Martin Scholes from Mc Master University
 
-- european call option is opposite
-    - betting that stock will go up
-    - then in future buy that stock for less price
+- Pytorch is recommended
 
-- bsm (black - scholes model)
-    - martin scholes from mc master
+- Grade
+    - Level 4: Max error less than a cent
+    - Level 3: less than a dollar
+    - Passing grade (Level 2): less than 10 dollars
 
-- pytorch is recommended
+- `riskfuel_test.py` is the file used for evaluation
 
-- error percentile less than a cent - get level 4
-- error less than a dollr - get level 3
-- less than 10 dollar - passing grade
-- riskfuel_test.py is the file used for evaluation
+- Any ML model can be used such as gradient boosted trees (e.g. XGB)
+    - Not necessary to use Neural Nets
 
-- not necessary to use neural net
+- Grading will be done on secret testing data which might have skewed distribution
 
-- can use gradient boosted machines/trees
-    - XGB
+- Tips
+    - Add dropout layers to prevent overfitting
+    - Use different testing, validation and testing dataset
+    - Use scaling techniques
+        - Range scaler (e.g. (x - min) / (max - min)) to transform values between 0 to 1
+        - Neural nets work best with normal distribution data, use batch normalization?
+        - Need to inverse tranform the predictions
+    - Use analytical pricer to guide your predictions
 
-- add dropout layers might help!
+- My ideas
+    - Use batch size
+    - Increase training data size
+        - Maybe 1 million?
+    - Increase width and depth of the network
