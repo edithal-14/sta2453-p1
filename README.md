@@ -67,6 +67,29 @@ The output should look something like this:
 
 The validation code will be checked manually for everyone. 
 
+## Grading Scheme 
+
+This project will use the following grading scheme.
+The max error between your model, and the pricer will be used to assign your grade. 
+
+### <u> Level 1 (B-) </u>
+To achieve this level, you must submit valid code. I must be able to run your python scripts, install any dependencies, and 
+be able to assess you. Failure to do so will result in a grade of 0.0. The model must display a valid max error exceeding $50 
+on the validation set. 
+
+### <u> Level 2 (B) </u>
+To achieve this level you must submit valid code, and the model must achieve a valid max error less than $50 but greater 
+than $5 on the validation set. 
+
+### <u>  Level 3 (A) </u>
+To achieve this level, you must submit valid code, and, the model must achieve a valid max error less than $5 but greater than $0.01 
+on the validation set. 
+
+### <u> Level 4 (A+) </u>
+To achieve this level, you must submit valid code, and, the model must achieve a valid max error of less than or equal to $0.01 (1 cent). 
+This is considered a professional level model. 
+
+
 ### *Do not use the analytic pricer as part of your model. This is considered cheating, you will fail automatically and be subject to academic dishonesty * 
 
 You are free to use any packages/frameworks you like provided that they can be run and installed on a `ubuntu 20.04` docker image found here `https://hub.docker.com/_/ubuntu`. When writing code to evaluate your model, feel free to delete the skeleton code within `riskfuel_test.py`. 

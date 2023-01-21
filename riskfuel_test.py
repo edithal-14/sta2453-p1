@@ -70,11 +70,11 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     # Calculate mean squared error
     result = F.mse_loss(y_hat, y)
 
-    # Max error
-    validation_max = torch.max(torch.abs(y - y_hat))
+    # Max loss 
+    max_loss = torch.max(torch.abs(y - y_hat))
 
     # Return performance metric; must be of type float
-    return result.item(), validation_max
+    return result.item(), max_loss.item()
 
 
 # A SIMPLE MODEL.
@@ -116,13 +116,13 @@ def main(args):
 
     # Load DataFrame and pass through riskfuel_test function.
     df = pd.read_csv(args.data_frame_name)
-    performance_metric, max_error = riskfuel_test(df)
+    performance_metric, max_loss = riskfuel_test(df)
 
     # Must pass this assertion
     assert isinstance(performance_metric, float)
 
     print(f" MODEL PERFORMANCE: {performance_metric} \n\n")
-    print(f" MAX ERROR: {max_error} \n\n")
+    print(f" MAX LOSS: {max_loss} \n\n")
 
 
 if __name__ == "__main__":
