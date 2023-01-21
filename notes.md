@@ -1,28 +1,47 @@
-### Notes
+- Scenario
+    - Pension fund calls trader
+    - Trader runs the pricing model
+    - Trader waits for couple of days
+    - Trader quotes the price to pension fund
 
-- Use batch size, or stochastic gradient
+- Riskfuel is a company which accelerates pricing model
 
-- take 1 mil for training
+- Put option
+    - Right to sell the stock at a strike price after maturity
+    - Bet the stock price will decrease
 
-- take less data for validation
+- Call option
+    - Right to buy the stock at a strike price after maturity
+    - Bet the stock price will increase
 
-- take less data for testing, may be same as validation
+- BSM (black - scholes model)
+    - Invented by Martin Scholes from Mc Master University
 
-- use scaling
-  - range scaler: 0 to 1
+- Pytorch is recommended
 
-- neural networks learn best for normally distributed data
+- Grade
+    - Level 4: Max error less than a cent
+    - Level 3: less than a dollar
+    - Passing grade (Level 2): less than 10 dollars
 
-- validation will be on a skewed transform
+- `riskfuel_test.py` is the file used for evaluation
 
-- use the analytical pricer to guide your network
-    - a.k.a sampling rate
+- Any ML model can be used such as gradient boosted trees (e.g. XGB)
+    - Not necessary to use Neural Nets
 
-- implement dropout
-- implement SGD
-- implement batch normalization
-- training data: 20000
-- validation data: 20000
-- test data: 20000
-- epochs: 100000
-- model: 5 -> 20 -> 20 -> 20 -> 100
+- Grading will be done on secret testing data which might have skewed distribution
+
+- Tips
+    - Add dropout layers to prevent overfitting
+    - Use different testing, validation and testing dataset
+    - Use scaling techniques
+        - Range scaler (e.g. (x - min) / (max - min)) to transform values between 0 to 1
+        - Neural nets work best with normal distribution data, use batch normalization?
+        - Need to inverse tranform the predictions
+    - Use analytical pricer to guide your predictions
+
+- My ideas
+    - Use batch size
+    - Increase training data size
+        - Maybe 1 million?
+    - Increase width and depth of the network
