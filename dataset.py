@@ -44,13 +44,21 @@ def main():
     xy_df = pd.DataFrame(xy, columns=["S", "K", "T", "r", "sigma", "value"])
     xy_df.to_csv("dataset/training_data.csv")
 
-    xy = generate_black_scholes_put_data(training_size)
+    xy = generate_black_scholes_put_data(validation_size)
     xy_df = pd.DataFrame(xy, columns=["S", "K", "T", "r", "sigma", "value"])
     xy_df.to_csv("dataset/validation_data.csv")
 
     xy = generate_black_scholes_put_data(testing_size)
     xy_df = pd.DataFrame(xy, columns=["S", "K", "T", "r", "sigma", "value"])
     xy_df.to_csv("dataset/testing_data.csv")
+
+    xy = generate_black_scholes_put_data(testing_size)
+    xy_df = pd.DataFrame(xy, columns=["S", "K", "T", "r", "sigma", "value"])
+    xy_df.to_csv("dataset/testing_data_1.csv")
+
+    xy = generate_black_scholes_put_data(testing_size)
+    xy_df = pd.DataFrame(xy, columns=["S", "K", "T", "r", "sigma", "value"])
+    xy_df.to_csv("dataset/testing_data_2.csv")
 
 
 if __name__ == "__main__":

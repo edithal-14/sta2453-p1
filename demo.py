@@ -5,32 +5,8 @@ from torch import nn
 from torch import optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
-
-class PutNet(nn.Module):
-    """
-    Example of a Neural Network that could be trained price a put option.
-    TODO: modify me!
-    """
-
-    def __init__(self) -> None:
-        super(PutNet, self).__init__()
-
-        num_layers = 3
-        layer_dim = 40
-        self.layers = nn.ModuleList([nn.Linear(5, layer_dim)])
-        for _ in range(num_layers):
-            self.layers.append(nn.Linear(layer_dim, layer_dim))
-        self.out = nn.Linear(layer_dim, 1)
-        self.d = nn.Dropout(p=0.2)
-
-    def forward(self, x):
-        for layer in self.layers:
-            x = self.d(F.relu(layer(x)))
-        x = self.out(x)
-        x = torch.squeeze(x, -1)
-        return x
-
+from utils.transform import Transform
+from utils.model import PutNet
 
 def main():
     """Train the model and save the checkpoint"""
@@ -43,12 +19,15 @@ def main():
     train_df = pd.read_csv("dataset/training_data.csv")
     valid_df = pd.read_csv("dataset/validation_data.csv")
 
+    # Init transformer
+    transform = Transform(use_boxcox=True)
+
     # Set up training
-    x = torch.Tensor(train_df[["S", "K", "T", "r", "sigma"]].to_numpy())
-    y = torch.Tensor(train_df[["value"]].to_numpy())
+    x = torch.Tensor(transform.transform_x(train_df[["S", "K", "T", "r", "sigma"]].to_numpy()))
+    y = torch.Tensor(transform.transform_y(train_df[["value"]].to_numpy()))
     training_data = torch.concat((x, y), dim=-1)
 
-    x = torch.Tensor(valid_df[["S", "K", "T", "r", "sigma"]].to_numpy())
+    x = torch.Tensor(transform.transform_x(valid_df[["S", "K", "T", "r", "sigma"]].to_numpy()))
     y = torch.Tensor(valid_df[["value"]].to_numpy())
     validation_data = torch.concat((x, y), dim=-1)
 
@@ -56,8 +35,8 @@ def main():
     # optimizer = optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
     optimizer = optim.Adam(model.parameters())
 
-    n_epochs = 1000
-    batch_size = 2**18
+    n_epochs = 10000
+    batch_size = 2**19
 
     train_dataloader = DataLoader(
         training_data,
@@ -101,16 +80,16 @@ def main():
         training_loss /= num_batches
         training_max_error /= num_batches
 
-        if (i+1) % 10 == 0:
+        if (i+1) % 100 == 0:
             # Check validation loss
             model.eval()
             with torch.no_grad():
                 validation_batch = next(iter(valid_dataloader)).to(device)
                 x_valid = validation_batch[:, :5]
-                y_valid = validation_batch[:, -1]
-                y_valid_hat = model(x_valid)
-                validation_loss = criterion(y_valid_hat, y_valid)
-                validation_max = torch.max(torch.abs(y_valid - y_valid_hat))
+                y_valid = validation_batch[:, -1].detach().cpu()
+                y_valid_hat = torch.Tensor(transform.inverse_transform_y(model(x_valid).detach().cpu().numpy()))
+                validation_loss = criterion(y_valid_hat, y_valid).item()
+                validation_max = torch.max(torch.abs(y_valid - y_valid_hat)).item()
             print(
                 f"Epoch: {i + 1} | Training Loss: {training_loss:.4f} | Training Max Error: {training_max_error:.4f} ",
                 f"| Validation Loss: {validation_loss:.4f} | Validation Max Error {validation_max:.4f}"

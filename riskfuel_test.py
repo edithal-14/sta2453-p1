@@ -9,6 +9,9 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 
+from utils.model import PutNet
+from utils.transform import Transform
+
 
 def riskfuel_test(df: pd.DataFrame) -> float:
     """
@@ -56,17 +59,20 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     # LOAD MODEL
     mm = PutNet()
     # mm.load_state_dict(torch.load("simple-model.pt"))
-    mm.load_state_dict(torch.load("models/model.pt"))
+    mm.load_state_dict(torch.load("models/model_1000000_train_10000_epoch_192_neurons_range_scaler.pt"))
     mm.eval()  # evaluation mode
 
     # EVALUATE MODEL
 
+    # Initialize transform function
+    transform = Transform(use_boxcox=True)
+
     # Acquire inputs/outputs
-    x = torch.Tensor(df[["S", "K", "T", "r", "sigma"]].to_numpy())
+    x = torch.Tensor(transform.transform_x(df[["S", "K", "T", "r", "sigma"]].to_numpy()))
     y = torch.Tensor(df[["value"]].to_numpy()).flatten()
 
     # Pass data through model
-    y_hat = mm(x)
+    y_hat = torch.Tensor(transform.inverse_transform_y(mm(x).detach().cpu().numpy()))
 
     # Calculate mean squared error
     result = F.mse_loss(y_hat, y)
@@ -77,35 +83,6 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     # Return performance metric; must be of type float
     return result.item(), max_loss.item()
 
-
-# A SIMPLE MODEL.
-class PutNet(nn.Module):
-    """
-    Example of a Neural Network that could be trained price a put option.
-    TODO: modify me!
-    """
-
-    def __init__(self) -> None:
-        super(PutNet, self).__init__()
-
-        self.l1 = nn.Linear(5, 40)
-        self.d1 = nn.Dropout(p=0.2)
-        self.l2 = nn.Linear(40, 40)
-        self.d2 = nn.Dropout(p=0.2)
-        self.l3 = nn.Linear(40, 40)
-        self.d3 = nn.Dropout(p=0.2)
-        self.out = nn.Linear(40, 1)
-
-    def forward(self, x):
-        x = F.relu(self.l1(x))
-        x = self.d1(x)
-        x = F.relu(self.l2(x))
-        x = self.d2(x)
-        x = F.relu(self.l3(x))
-        x = self.d3(x)
-        x = self.out(x)
-        x = torch.squeeze(x, -1)
-        return x
 
 def get_parser():
     """Parses the command line for the dataframe file name"""
