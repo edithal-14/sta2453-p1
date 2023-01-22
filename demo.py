@@ -7,6 +7,8 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from utils.transform import Transform
 from utils.model import PutNet
+import math
+import sys
 
 def main():
     """Train the model and save the checkpoint"""
@@ -54,10 +56,13 @@ def main():
         pin_memory=True
     )
 
+    min_valid_max_error = float("inf")
+
     for i in tqdm(range(n_epochs)):
         training_loss = 0.0
         training_max_error = 0.0
         num_batches = 0
+
         for batch in train_dataloader:
             batch = batch.to(device)
             x_batch = batch[:, :5]
@@ -90,12 +95,25 @@ def main():
                 y_valid_hat = torch.Tensor(transform.inverse_transform_y(model(x_valid).detach().cpu().numpy()))
                 validation_loss = criterion(y_valid_hat, y_valid).item()
                 validation_max = torch.max(torch.abs(y_valid - y_valid_hat)).item()
+                # Stop if validation_max is nan
+                if math.isnan(validation_max):
+                    import pdb
+                    pdb.set_trace()
+                    sys.exit("Validation max error is NaN!")
+
+            # Save the best model
+            if validation_max < min_valid_max_error:
+                min_valid_max_error = validation_max
+                print("Saving model")
+                torch.save(model.state_dict(), f"models/model_epochs_{i+1}.pt")
+
             print(
                 f"Epoch: {i + 1} | Training Loss: {training_loss:.4f} | Training Max Error: {training_max_error:.4f} ",
                 f"| Validation Loss: {validation_loss:.4f} | Validation Max Error {validation_max:.4f}"
             )
+
             model.train()
-    torch.save(model.state_dict(), "models/model.pt")
+    torch.save(model.state_dict(), f"models/model_epochs_{n_epochs}.pt")
 
 
 if __name__ == "__main__":
