@@ -17,6 +17,9 @@ def main():
     device = "cuda:0"
     model = PutNet().to(device)
 
+    # Load weights
+    model.load_state_dict(torch.load("models/model_1000000_train_19000_epoch_192_neurons_boxcox_scaler.pt"))
+
     # Load dataset
     train_df = pd.read_csv("dataset/training_data.csv")
     valid_df = pd.read_csv("dataset/validation_data.csv")
