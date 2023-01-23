@@ -32,6 +32,22 @@ def generate_black_scholes_put_data(n):
     x = x * deltas + l_bounds
     y = black_scholes_put(S=x[:, 0], K=x[:, 1], T=x[:, 2], r=x[:, 3], sigma=x[:, 4]).reshape(-1, 1)
 
+    # Generate data points along the edges of the domain
+    # Take 10 points along each axis
+    eps = np.nextafter(np.float32(0), np.float32(1))
+    x_new = np.zeros((10**5, 5))
+    i = 0
+    for s in np.linspace(S_bound[0] + eps, S_bound[1], num=10):
+        for k in np.linspace(K_bound[0], K_bound[1], num=10):
+            for t in np.linspace(T_bound[0] + eps, T_bound[1], num=10):
+                for r in np.linspace(r_bound[0], r_bound[1], num=10):
+                    for sigma in np.linspace(sigma_bound[0], sigma_bound[1], num=10):
+                        x_new[i,:] = np.array([s, k, t, r, sigma])
+                        i+=1
+    y_new = black_scholes_put(S=x_new[:, 0], K=x_new[:, 1], T=x_new[:, 2], r=x_new[:, 3], sigma=x_new[:, 4]).reshape(-1, 1)
+    x = np.concatenate((x, x_new))
+    y = np.concatenate((y, y_new))
+
     return np.append(x, y, axis=1)
 
 
