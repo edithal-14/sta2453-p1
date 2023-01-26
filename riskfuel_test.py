@@ -59,7 +59,7 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     # LOAD MODEL
     mm = PutNet()
     # mm.load_state_dict(torch.load("simple-model.pt"))
-    mm.load_state_dict(torch.load("models/model_1900000_train_22700_epoch_192_neurons_boxcox_scaler.pt"))
+    mm.load_state_dict(torch.load("models/model_1900000_train_32300_epoch_192_neurons_boxcox_scaler.pt"))
     mm.eval()  # evaluation mode
 
     # EVALUATE MODEL
@@ -78,10 +78,10 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     result = F.mse_loss(y_hat, y)
 
     # Max loss 
-    max_loss = torch.max(torch.abs(y - y_hat))
+    max_loss, max_loss_idx = torch.max(torch.abs(y - y_hat), dim=0)
 
     # Return performance metric; must be of type float
-    return result.item(), max_loss.item()
+    return result.item(), max_loss.item(), max_loss_idx.item(), y_hat
 
 
 def get_parser():
@@ -101,13 +101,14 @@ def main(args):
 
     # Load DataFrame and pass through riskfuel_test function.
     df = pd.read_csv(args.data_frame_name)
-    performance_metric, max_loss = riskfuel_test(df)
+    performance_metric, max_loss, max_loss_idx, y_hat = riskfuel_test(df)
 
     # Must pass this assertion
     assert isinstance(performance_metric, float)
 
     print(f" MODEL PERFORMANCE: {performance_metric} \n\n")
     print(f" MAX LOSS: {max_loss} \n\n")
+    print(f" MAX LOSS IDX: {max_loss_idx} \n\n")
 
 
 if __name__ == "__main__":
