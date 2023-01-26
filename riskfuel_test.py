@@ -59,7 +59,7 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     # LOAD MODEL
     mm = PutNet()
     # mm.load_state_dict(torch.load("simple-model.pt"))
-    mm.load_state_dict(torch.load("models/model_1900000_train_32300_epoch_192_neurons_boxcox_scaler.pt"))
+    mm.load_state_dict(torch.load("models/model_1900000_train_42300_epoch_192_neurons_boxcox_scaler.pt"))
     mm.eval()  # evaluation mode
 
     # EVALUATE MODEL
@@ -108,8 +108,6 @@ def main(args):
 
     print(f" MODEL PERFORMANCE: {performance_metric} \n\n")
     print(f" MAX LOSS: {max_loss} \n\n")
-    print(f" MAX LOSS IDX: {max_loss_idx} \n\n")
-
 
 if __name__ == "__main__":
     main(sys.argv[1:])
