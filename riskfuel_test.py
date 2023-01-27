@@ -59,7 +59,7 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     # LOAD MODEL
     mm = PutNet()
     # mm.load_state_dict(torch.load("simple-model.pt"))
-    mm.load_state_dict(torch.load("models/model_1900000_train_44200_epoch_192_neurons_boxcox_scaler.pt", map_location="cpu"))
+    mm.load_state_dict(torch.load("models/model_4900000_train_44200_epoch_192_neurons_boxcox_scaler.pt", map_location="cpu"))
     mm.eval()  # evaluation mode
 
     # EVALUATE MODEL

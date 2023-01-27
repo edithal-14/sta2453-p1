@@ -15,7 +15,7 @@ def main():
     model = PutNet().to(device)
 
     # Load weights
-    model.load_state_dict(torch.load("models/model_1900000_train_44200_epoch_192_neurons_boxcox_scaler.pt"))
+    model.load_state_dict(torch.load("models/model_4900000_train_44200_epoch_192_neurons_boxcox_scaler.pt"))
 
     # Load dataset
     train_df = pd.read_csv("dataset/training_data.csv")
