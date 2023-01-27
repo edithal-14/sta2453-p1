@@ -1,18 +1,14 @@
 import numpy as np
 import pandas as pd
 
+from utils.bounds import S_bound, K_bound, T_bound, r_bound, sigma_bound, value_bound
+
 class Transform:
     def __init__(self, use_boxcox=False):
-        df = pd.read_csv("dataset/training_data.csv")
-        df = df[["S", "K", "T", "r", "sigma", "value"]]
-        df = df.to_numpy()
-        self.min_vals = []
-        self.max_vals = []
+        self.min_vals = [S_bound[0], K_bound[0], T_bound[0], r_bound[0], sigma_bound[0], value_bound[0]]
+        self.max_vals = [S_bound[1], K_bound[1], T_bound[1], r_bound[1], sigma_bound[1], value_bound[1]]
         self.lmda = 0.1
         self.use_boxcox = use_boxcox
-        for i in range(df.shape[1]):
-            self.min_vals.append(np.min(df[:, i]))
-            self.max_vals.append(np.max(df[:, i]))
 
     def transform_x(self, x):
         x_new = np.copy(x)
