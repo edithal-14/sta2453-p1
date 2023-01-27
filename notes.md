@@ -33,11 +33,8 @@
 - Grading will be done on secret testing data which might have skewed distribution
 
 - Tips
-    - Add dropout layers to prevent overfitting
     - Use scaling techniques
         - Range scaler (e.g. (x - min) / (max - min)) to transform values between 0 to 1
         - Neural nets work best with normal distribution data, use batch normalization?
     - Use analytical pricer to guide your predictions
-    - Use batch size
-    - Increase training data size
     - Increase width and depth of the network
