@@ -72,13 +72,14 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     y = torch.Tensor(df[["value"]].to_numpy()).flatten()
 
     # Pass data through model
-    y_hat = torch.Tensor(transform.inverse_transform_y(mm(x).detach().cpu().numpy()))
+    with torch.no_grad():
+        y_hat = torch.Tensor(transform.inverse_transform_y(mm(x).detach().cpu().numpy()))
 
-    # Calculate mean squared error
-    result = F.mse_loss(y_hat, y)
+        # Calculate mean squared error
+        result = F.mse_loss(y_hat, y)
 
-    # Max loss 
-    max_loss, max_loss_idx = torch.max(torch.abs(y - y_hat), dim=0)
+        # Max loss
+        max_loss, max_loss_idx = torch.max(torch.abs(y - y_hat), dim=0)
 
     # Return performance metric; must be of type float
     return result.item(), max_loss.item(), max_loss_idx.item(), y_hat
