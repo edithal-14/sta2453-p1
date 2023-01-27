@@ -6,7 +6,6 @@ from utils.bounds import S_bound, K_bound, T_bound, r_bound, sigma_bound
 
 
 def generate_data(n):
-    # TODO: modify me!
     return np.random.rand(n, 5)
 
 
@@ -103,8 +102,11 @@ def generate_black_scholes_put_data(n=1000000):
 
 
 def main():
-    training_size = 1000000
+    # 8 million
+    training_size = 4000000
+    # 1 million
     validation_size = 1000000
+    # 1 million
     testing_size = 1000000
 
     xy = generate_black_scholes_put_data(training_size)
