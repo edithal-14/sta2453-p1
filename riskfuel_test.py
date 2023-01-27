@@ -59,13 +59,13 @@ def riskfuel_test(df: pd.DataFrame) -> float:
     # LOAD MODEL
     mm = PutNet()
     # mm.load_state_dict(torch.load("simple-model.pt"))
-    mm.load_state_dict(torch.load("models/model_4900000_train_44200_epoch_192_neurons_boxcox_scaler.pt", map_location="cpu"))
+    mm.load_state_dict(torch.load("models/model_2900000_train_100000_epochs_600_neurons_range_scaler_epoch_98000.pt", map_location="cpu"))
     mm.eval()  # evaluation mode
 
     # EVALUATE MODEL
 
     # Initialize transform function
-    transform = Transform(use_boxcox=True)
+    transform = Transform()
 
     # Acquire inputs/outputs
     x = torch.Tensor(transform.transform_x(df[["S", "K", "T", "r", "sigma"]].to_numpy()))

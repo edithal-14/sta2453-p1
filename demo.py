@@ -15,14 +15,14 @@ def main():
     model = PutNet().to(device)
 
     # Load weights
-    model.load_state_dict(torch.load("models/model_4900000_train_44200_epoch_192_neurons_boxcox_scaler.pt"))
+    model.load_state_dict(torch.load("models/model_2900000_train_980000_epochs_600_neurons_range_scaler_epoch_98000.pt"))
 
     # Load dataset
     train_df = pd.read_csv("dataset/training_data.csv")
     valid_df = pd.read_csv("dataset/validation_data.csv")
 
     # Init transformer
-    transform = Transform(use_boxcox=True)
+    transform = Transform()
 
     # Set up training
     x = torch.Tensor(transform.transform_x(train_df[["S", "K", "T", "r", "sigma"]].to_numpy()))
@@ -37,7 +37,7 @@ def main():
     # optimizer = optim.SGD(model.parameters(), lr=1e-3, momentum=0.9)
     optimizer = optim.Adam(model.parameters())
 
-    n_epochs = 10000
+    n_epochs = 100000
 
     min_valid_max_error = float("inf")
 
@@ -60,7 +60,7 @@ def main():
         loss.backward()
         optimizer.step()
 
-        if (i+1) % 100 == 0:
+        if (i+1) % 1000 == 0:
             # Check validation loss
             model.eval()
             with torch.no_grad():
@@ -74,7 +74,7 @@ def main():
             if validation_max < min_valid_max_error:
                 min_valid_max_error = validation_max
                 print("Saving model")
-                torch.save(model.state_dict(), f"models/model_epochs_{i+1}.pt")
+                torch.save(model.state_dict(), f"models/model_2900000_train_100000_epochs_600_neurons_range_scaler_epoch_{i+1}.pt")
 
             print(
                 f"Epoch: {i + 1} | Training Loss: {training_loss:.4f} | Training Max Error: {training_max_error:.4f} ",
@@ -82,6 +82,8 @@ def main():
             )
 
             model.train()
+    print("Saving model")
+    torch.save(model.state_dict(), f"models/model_2900000_train_100000_epochs_600_neurons_range_scaler_epoch_{i+1}.pt")
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ class PutNet(nn.Module):
         super(PutNet, self).__init__()
 
         num_layers = 3
-        layer_dim = 64
+        layer_dim = 200
         self.layers = nn.ModuleList([
             nn.Linear(5, layer_dim),
             nn.ReLU(),

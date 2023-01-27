@@ -102,11 +102,8 @@ def generate_black_scholes_put_data(n=1000000):
 
 
 def main():
-    # 8 million
-    training_size = 4000000
-    # 1 million
+    training_size = 2000000
     validation_size = 1000000
-    # 1 million
     testing_size = 1000000
 
     xy = generate_black_scholes_put_data(training_size)
